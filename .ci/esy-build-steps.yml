@@ -6,6 +6,7 @@ steps:
       versionSpec: '8.9'
   - script: npm install -g esy@0.4.9
     displayName: 'npm install -g esy@0.4.9'
+  - script: esy b ./.ci/format.sh
   - script: esy install
     displayName: 'esy install'
   - script: git diff --exit-code

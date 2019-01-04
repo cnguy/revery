@@ -9,6 +9,7 @@
   "scripts": {
     "build": "esy b",
     "build:js": "esy b dune build examples/Bin.bc.js",
+    "format": "esy b .ci/format.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "homepage": "https://github.com/bryphe/revery#readme",
