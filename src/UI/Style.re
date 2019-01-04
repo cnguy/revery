@@ -122,7 +122,7 @@ let make =
                    ~color=Colors.black,
                    (),
                  ),
-      ~cursor = ?,
+      ~cursor=?,
       _unit: unit,
     ) => {
   let ret: t = {
