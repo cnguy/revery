@@ -1,19 +1,16 @@
 (executables
-    (names Hello Autocomplete Flexbox Border Boxshadow DefaultButton Hackernews)
+    (names Hello Autocomplete Flexbox Border Boxshadow DefaultButton)
     (preprocess (pps lwt_ppx))
     (package Revery)
-    (public_names Hello Autocomplete Flexbox Border Boxshadow DefaultButton Hackernews)
+    (public_names Hello Autocomplete Flexbox Border Boxshadow DefaultButton)
     (js_of_ocaml)
     (libraries
         js_of_ocaml
         str
         Revery
         flex
-        cohttp 
-        cohttp-lwt-unix
-        yojson
             ))
 (install
     (section bin)
     (package Revery)
-    (files Roboto-Regular.ttf Roboto-Bold.ttf binary.dat index.html Hello.bc.js gl-matrix-min.js outrun-logo.png))
+    (files Roboto-Regular.ttf binary.dat index.html Hello.bc.js gl-matrix-min.js outrun-logo.png))

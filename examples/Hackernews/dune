@@ -1,0 +1,19 @@
+(executables
+    (names Hackernews)
+    (preprocess (pps lwt_ppx))
+    (package Revery)
+    (public_names Hackernews)
+    (js_of_ocaml)
+    (libraries
+        js_of_ocaml
+        str
+        Revery
+        flex
+        cohttp 
+        cohttp-lwt-unix
+        yojson
+            ))
+(install
+    (section bin)
+    (package Revery)
+    (files Roboto-Bold.ttf))
