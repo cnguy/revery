@@ -7,17 +7,8 @@ include (
                 render(
                   () => {
                     let posts =
-                      (
-                        switch (route) {
-                        | Top => API.top
-                        | New => API.new_
-                        | Show => API.show
-                        | Ask => API.ask
-                        | Jobs => API.jobs
-                        | _ => API.top
-                        }
-                      )
-                      |> API.fetchItemIds
+                      route
+                      |> API.fetchItemIdsFromRoute
                       |> Lwt_main.run
                       |> Decoder.postIds
                       |> ListUtils.firstN(10)

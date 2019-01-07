@@ -5,7 +5,7 @@ open Revery.UI;
 open Types;
 
 /*
-   `Router` is a simple component that re-renders if the route chages.
+   `Router` is a simple component that re-renders if the route changes.
    It does not handle history.
  */
 module Router = (

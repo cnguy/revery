@@ -19,4 +19,4 @@ let dark = () => {
 };
 
 let generalFontSize = 13;
-let currentTheme = ref(dark());
+let currentTheme = ref(regular());
