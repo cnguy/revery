@@ -27,7 +27,7 @@ module Hackernews = (
           () =>
             <Router
               defaultRoute=Top
-              pseudoChildren={(~route, ~setRoute) =>
+              app={(~route, ~setRoute) =>
                 <view>
                   <Header setRoute />
                   {switch (route) {

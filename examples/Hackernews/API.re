@@ -1,5 +1,4 @@
 open Lwt.Infix;
-
 open Cohttp_lwt_unix;
 
 let baseURL = "https://hacker-news.firebaseio.com/v0";

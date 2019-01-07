@@ -6,7 +6,7 @@ include (
           val component((render, ~route: route, ~children, ()) =>
                 render(
                   () => {
-                    let newList =
+                    let posts =
                       (
                         switch (route) {
                         | Top => API.top
@@ -19,17 +19,8 @@ include (
                       )
                       |> API.fetchItemIds
                       |> Lwt_main.run
-                      |> Decoder.postIds;
-                    let finalList =
-                      List.[
-                        nth(newList, 0),
-                        nth(newList, 1),
-                        nth(newList, 2),
-                        nth(newList, 3),
-                        nth(newList, 4),
-                      ];
-                    let posts =
-                      finalList
+                      |> Decoder.postIds
+                      |> ListUtils.firstN(10)
                       |> List.map(id =>
                            id |> API.fetchItem |> Lwt_main.run |> Decoder.post
                          );
