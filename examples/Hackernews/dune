@@ -10,8 +10,10 @@
         Revery
         flex
         cohttp 
+        cohttp-async
         cohttp-lwt-unix
         yojson
+        async
             ))
 (install
     (section bin)

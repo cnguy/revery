@@ -30,8 +30,8 @@ let render = (container: UiContainer.t, component: UiReact.component) => {
 
   let size = Window.getFramebufferSize(window);
   let pixelRatio = Window.getDevicePixelRatio(window);
-  let applyRatio = (n) => int_of_float(float_of_int(n) /. pixelRatio); 
-	/* Layout */
+  let applyRatio = n => int_of_float(float_of_int(n) /. pixelRatio);
+  /* Layout */
   switch (options.autoSize) {
   | false =>
     rootNode#setStyle(
@@ -70,7 +70,8 @@ let render = (container: UiContainer.t, component: UiReact.component) => {
     /* Do a first pass for all 'opaque' geometry */
     /* This helps reduce the overhead for the more expensive alpha pass, next */
 
-    let drawContext = NodeDrawContext.create(int_of_float(pixelRatio), 0, 1.0);
+    let drawContext =
+      NodeDrawContext.create(int_of_float(pixelRatio), 0, 1.0);
 
     let solidPass = SolidPass(_projection);
     rootNode#draw(solidPass, drawContext);

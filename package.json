@@ -28,11 +28,9 @@
   },
   "dependencies": {
     "@esy-ocaml/reason": "^3.3.7",
-    "reason-glfw": "^3.2.1010",
-    "reason-fontkit": "^2.0.4",
-    "reason-gl-matrix": "^0.9.9301",
-    "reason-reactify": "^2.2.0",
+    "@opam/async": "v0.11.0",
     "@opam/cohttp": "1.2.0",
+    "@opam/cohttp-async": "1.2.0",
     "@opam/cohttp-lwt-unix": "1.2.0",
     "@opam/color": "^0.2.0",
     "@opam/js_of_ocaml": "*",
@@ -43,6 +41,10 @@
     "@opam/tls": "0.9.2",
     "@opam/yojson": "1.5.0",
     "flex": "^1.2.2",
+    "reason-fontkit": "^2.0.4",
+    "reason-gl-matrix": "^0.9.9301",
+    "reason-glfw": "^3.2.1010",
+    "reason-reactify": "^2.2.0",
     "rejest": "^1.2.0"
   },
   "resolutions": {
