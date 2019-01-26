@@ -36,7 +36,9 @@ class textNode (text: string) = {
       let font =
         FontCache.load(
           style.fontFamily,
-          style.fontSize * parentContext.pixelRatio,
+          int_of_float(
+            float_of_int(style.fontSize) *. parentContext.pixelRatio +. 0.5,
+          ),
         );
       let dimensions = _super#measurements();
       let color = Color.multiplyAlpha(opacity, style.color);
@@ -57,6 +59,12 @@ class textNode (text: string) = {
 
         let {width, height, bearingX, bearingY, advance, _} = glyph;
 
+        let width = float_of_int(width) /. parentContext.pixelRatio;
+        let height = float_of_int(height) /. parentContext.pixelRatio;
+        let bearingX = float_of_int(bearingX) /. parentContext.pixelRatio;
+        let bearingY = float_of_int(bearingY) /. parentContext.pixelRatio;
+        let advance = float_of_int(advance) /. parentContext.pixelRatio;
+
         Glfw.glPixelStorei(GL_PACK_ALIGNMENT, 1);
         Glfw.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -68,17 +76,14 @@ class textNode (text: string) = {
         Mat4.fromTranslation(
           glyphTransform,
           Vec3.create(
-            x +. float_of_int(bearingX) +. float_of_int(width) /. 2.,
-            float_of_int(height) *. 0.5 -. float_of_int(bearingY),
+            x +. bearingX +. width /. 2.,
+            height *. 0.5 -. bearingY,
             0.0,
           ),
         );
 
         let scaleTransform = Mat4.create();
-        Mat4.fromScaling(
-          scaleTransform,
-          Vec3.create(float_of_int(width), float_of_int(height), 1.0),
-        );
+        Mat4.fromScaling(scaleTransform, Vec3.create(width, height, 1.0));
 
         let local = Mat4.create();
         Mat4.multiply(local, glyphTransform, scaleTransform);
@@ -95,7 +100,7 @@ class textNode (text: string) = {
 
         Geometry.draw(quad, textureShader);
 
-        x +. float_of_int(advance) /. 64.0;
+        x +. advance /. 64.0;
       };
 
       let shapedText = FontRenderer.shape(font, text);
@@ -117,12 +122,15 @@ class textNode (text: string) = {
       /* TODO: Cache font locally in variable */
       let style = _super#getStyle();
       let font =
-        FontCache.load(style.fontFamily, int_of_float(float_of_int(style.fontSize) *. pixelRatio));
+        FontCache.load(
+          style.fontFamily,
+          int_of_float(float_of_int(style.fontSize) *. pixelRatio),
+        );
 
       let d = FontRenderer.measure(font, text);
       let ret: Layout.LayoutTypes.dimensions = {
-        LayoutTypes.width: d.width,
-        height: d.height,
+        LayoutTypes.width: int_of_float(float_of_int(d.width) /. pixelRatio),
+        height: int_of_float(float_of_int(d.height) /. pixelRatio),
       };
       ret;
     };

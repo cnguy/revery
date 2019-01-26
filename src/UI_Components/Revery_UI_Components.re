@@ -6,3 +6,7 @@
 
 module Clickable = Clickable;
 module Button = Button;
+module Slider = Slider;
+module Input = Input;
+module RadioButtons = RadioButtons;
+module Checkbox = Checkbox;

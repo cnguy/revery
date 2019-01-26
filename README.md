@@ -19,5 +19,3 @@ Implemented so far:
 ## Dark theme
 
 ![Dark theme](https://i.imgur.com/EMim05Y.png)
-
-

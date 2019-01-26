@@ -10,15 +10,6 @@ module LayoutTypes = Layout.LayoutTypes;
 module Style = Style;
 module Transform = Transform;
 
-/* Expose hooks as part of the public API */
-include Hooks;
-
-let useState = UiReact.useState;
-let useReducer = UiReact.useReducer;
-let useContext = UiReact.useContext;
-let createContext = UiReact.createContext;
-let getProvider = UiReact.getProvider;
-
 class node = class Node.node(RenderPass.t);
 class viewNode = class ViewNode.viewNode;
 class textNode = class TextNode.textNode;
@@ -27,11 +18,13 @@ class imageNode = class ImageNode.imageNode;
 module Mouse = Mouse;
 module NodeEvents = NodeEvents;
 module UiEvents = UiEvents;
-let component = UiReact.component;
+
+module React = UiReact;
+module Hooks = Hooks;
 
 include Primitives;
 
-type renderFunction = unit => UiReact.component;
+type renderFunction = unit => UiReact.syntheticElement;
 
 open UiContainer;
 
@@ -43,11 +36,15 @@ let start =
     ) => {
   let uiDirty = ref(false);
 
-  let onEndReconcile = _node => uiDirty := true;
+  let onStale = () => {
+    uiDirty := true;
+  };
+
+  let _ = Revery_Core.Event.subscribe(React.onStale, onStale);
 
   let rootNode = (new viewNode)();
-  let container = UiReact.createContainer(~onEndReconcile, rootNode);
   let mouseCursor: Mouse.Cursor.t = Mouse.Cursor.make();
+  let container = React.Container.create(rootNode);
   let ui =
     UiContainer.create(
       window,
@@ -61,11 +58,10 @@ let start =
     Revery_Core.Event.subscribe(
       window.onMouseMove,
       m => {
-        let pixelRatio = Window.getDevicePixelRatio(window);
         let evt =
           Revery_Core.Events.InternalMouseMove({
-            mouseX: m.mouseX *. pixelRatio,
-            mouseY: m.mouseY *. pixelRatio,
+            mouseX: m.mouseX,
+            mouseY: m.mouseY,
           });
         Mouse.dispatch(mouseCursor, evt, rootNode);
       },
@@ -91,6 +87,15 @@ let start =
 
   let _ =
     Revery_Core.Event.subscribe(
+      window.onMouseWheel,
+      m => {
+        let evt = Revery_Core.Events.InternalMouseWheel(m);
+        Mouse.dispatch(mouseCursor, evt, rootNode);
+      },
+    );
+
+  let _ =
+    Revery_Core.Event.subscribe(
       Mouse.onCursorChanged,
       cursor => {
         let glfwCursor = Revery_Core.MouseCursors.toGlfwCursor(cursor);
@@ -99,7 +104,7 @@ let start =
     );
 
   let _ =
-    Reactify.Event.subscribe(FontCache.onFontLoaded, () =>
+    Revery_Core.Event.subscribe(FontCache.onFontLoaded, () =>
       Window.render(window)
     );
 
@@ -109,9 +114,14 @@ let start =
   Window.setRenderCallback(
     window,
     () => {
+      /*
+       * The dirty flag needs to be cleared before rendering,
+       * as some events during rendering might trigger a 'dirty',
+       * meaning that we'll need to re-render again next frame.
+       */
+      uiDirty := false;
       let component = render();
       UiRender.render(ui, component);
-      uiDirty := false;
     },
   );
 };
