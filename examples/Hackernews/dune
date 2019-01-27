@@ -9,8 +9,10 @@
         str
         Revery
         flex
+        async
         cohttp 
         cohttp-lwt-unix
+        cohttp-async
         yojson
             ))
 (install

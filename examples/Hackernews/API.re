@@ -27,3 +27,29 @@ let toString = ((_resp, body)) => body |> Cohttp_lwt.Body.to_string;
 let fetchItemIds = url => Client.get(Uri.of_string(url)) >>= toString;
 let fetchItemIdsFromRoute = route => route |> urlFromRoute |> fetchItemIds;
 let fetchItem = id => Client.get(Uri.of_string(item(id))) >>= toString;
+
+let asyncToString = ((_resp, body)) => body |> Cohttp_async.Body.to_string;
+
+let asyncRun = () => {
+  Cohttp_async.(
+    Async.(
+      Client.get(Uri.of_string(top)) >>= asyncToString >>| (body => body)
+    )
+  );
+};
+
+let asyncRun2 = () => {
+  Cohttp_async.(
+    Async.(
+      Client.get(Uri.of_string(top)) >>= asyncToString >>| (body => body)
+    )
+  );
+};
+
+let asyncFetchItemIds = _url => {
+  (); /*  Command.async(~summary="", Command.Spec.(empty), (url => asyncRun(~url)))  |> Command.run;*/
+    /*asyncRun(~url);*/
+};
+
+let asyncFetchItemIdsFromRoute = route =>
+  route |> urlFromRoute |> asyncFetchItemIds;
