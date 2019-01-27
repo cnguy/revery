@@ -1,27 +1,21 @@
 open Revery.UI;
 
-open Types;
+let component = React.component("Hackernews_Listing");
 
-include (
-          val component((render, ~route: route, ~children, ()) =>
-                render(
-                  () => {
-                    let posts =
-                      route
-                      |> API.fetchItemIdsFromRoute
-                      |> Lwt_main.run
-                      |> Decoder.postIds
-                      |> ListUtils.firstN(10)
-                      |> List.map(id =>
-                           id |> API.fetchItem |> Lwt_main.run |> Decoder.post
-                         );
+let make = (~route, ()) =>
+  component((_slots: React.Hooks.empty) => {
+    let posts =
+      route
+      |> API.fetchItemIdsFromRoute
+      |> Lwt_main.run
+      |> Decoder.postIds
+      |> ListUtils.firstN(10)
+      |> List.map(id => id |> API.fetchItem |> Lwt_main.run |> Decoder.post);
 
-                    let postsToElements = posts =>
-                      posts |> List.map(post => <Post post />);
+    let postsToElements = posts => posts |> List.map(post => <Post post />);
 
-                    <view> ...{postsToElements(posts)} </view>;
-                  },
-                  ~children,
-                )
-              )
-        );
+    <View> ...{postsToElements(posts)} </View>;
+  });
+
+let createElement = (~children as _, ~route, ()) =>
+  React.element(make(~route, ()));

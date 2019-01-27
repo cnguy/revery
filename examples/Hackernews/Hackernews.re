@@ -4,44 +4,39 @@ open Revery.UI;
 
 open Types;
 
-/*
-   `Router` is a simple component that re-renders if the route changes.
-   It does not handle history.
- */
-module Router = (
-  val component((render, ~defaultRoute: route, ~app, ~children, ()) =>
-        render(
-          () => {
-            let (route, setRoute) = useState(defaultRoute);
+module Hackernews = {
+  let component = React.component("Hackernews_Hackernews");
 
-            app(~route, ~setRoute);
-          },
-          ~children,
-        )
-      )
-);
+  let make = () =>
+    component(slots => {
+      let (route, setRoute, _slots: React.Hooks.empty) =
+        React.Hooks.state(Top, slots);
+      <View>
+        <Header setRoute />
+        {switch (route) {
+         | Comments(_id) => <View />
+         | Profile(_user) => <View />
+         | _ => <Listing route />
+         }}
+      </View>;
+      /*
+       <Router
+         defaultRoute=Top
+         view={(~route: route, ~setRoute: route => unit) =>
+           <View>
+             <Header setRoute />
+             {switch (route) {
+              | Comments(_id) => <View />
+              | Profile(_user) => <View />
+              | _ => <Listing route />
+              }}
+           </View>
+         }
+       />;*/
+    });
 
-module Hackernews = (
-  val component((render, ~children, ()) =>
-        render(
-          () =>
-            <Router
-              defaultRoute=Top
-              app={(~route, ~setRoute) =>
-                <view>
-                  <Header setRoute />
-                  {switch (route) {
-                   | Comments(_id) => <view />
-                   | Profile(_user) => <view />
-                   | _ => <Listing route />
-                   }}
-                </view>
-              }
-            />,
-          ~children,
-        )
-      )
-);
+  let createElement = (~children as _, ()) => React.element(make());
+};
 
 let init = app => {
   let win =
