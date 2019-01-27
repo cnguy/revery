@@ -6,55 +6,51 @@ open Types;
 
 module Styles = {
   let container =
-    Style.make(
-      ~flexDirection=LayoutTypes.Row,
-      ~justifyContent=LayoutTypes.JustifySpaceBetween,
-      ~backgroundColor=Colors.darkOrange,
-      (),
-    );
-  let view = Style.make(~flexDirection=LayoutTypes.Row, ());
+    Style.[
+      flexDirection(`Row),
+      /*      justifyContent(`JustifySpaceBetween),*/
+      backgroundColor(Colors.darkOrange),
+    ];
+  let view = Style.[flexDirection(`Row)];
   let item =
-    Style.make(
-      ~color=Colors.white,
-      ~fontFamily="Roboto-Regular.ttf",
-      ~fontSize=Themes.generalFontSize,
-      ~margin=12,
-      (),
-    );
+    Style.[
+      color(Colors.white),
+      fontFamily("Roboto-Regular.ttf"),
+      fontSize(Themes.generalFontSize),
+      margin(12),
+    ];
 };
 
-include (
-          val component((render, ~setRoute, ~children, ()) =>
-                render(
-                  () =>
-                    <view style=Styles.container>
-                      <view style=Styles.view>
-                        <Clickable onClick={() => setRoute(Top)}>
-                          <text style=Styles.item> "HN" </text>
-                        </Clickable>
-                        <Clickable onClick={() => setRoute(Top)}>
-                          <text style=Styles.item> "Top" </text>
-                        </Clickable>
-                        <Clickable onClick={() => setRoute(New)}>
-                          <text style=Styles.item> "New" </text>
-                        </Clickable>
-                        <Clickable onClick={() => setRoute(Show)}>
-                          <text style=Styles.item> "Show" </text>
-                        </Clickable>
-                        <Clickable onClick={() => setRoute(Ask)}>
-                          <text style=Styles.item> "Ask" </text>
-                        </Clickable>
-                        <Clickable onClick={_ => setRoute(Jobs)}>
-                          <text style=Styles.item> "Jobs" </text>
-                        </Clickable>
-                      </view>
-                      <view>
-                        <text style=Styles.item>
-                          "Built with ReasonML and Revery"
-                        </text>
-                      </view>
-                    </view>,
-                  ~children,
-                )
-              )
-        );
+let component = React.component("Hackernews_Header");
+
+let make = (~setRoute, ()) =>
+  component((_slots: React.Hooks.empty) =>
+    <View style=Styles.container>
+      <View style=Styles.view>
+        <Clickable onClick={() => setRoute(Top)}>
+          <Text style=Styles.item text="HN" />
+        </Clickable>
+        <Clickable onClick={() => setRoute(Top)}>
+          <Text style=Styles.item text="Top" />
+        </Clickable>
+        <Clickable onClick={() => setRoute(New)}>
+          <Text style=Styles.item text="New" />
+        </Clickable>
+        <Clickable onClick={() => setRoute(Show)}>
+          <Text style=Styles.item text="Show" />
+        </Clickable>
+        <Clickable onClick={() => setRoute(Ask)}>
+          <Text style=Styles.item text="Ask" />
+        </Clickable>
+        <Clickable onClick={_ => setRoute(Jobs)}>
+          <Text style=Styles.item text="Jobs" />
+        </Clickable>
+      </View>
+      <View>
+        <Text style=Styles.item text="Built with ReasonML and Revery" />
+      </View>
+    </View>
+  );
+
+let createElement = (~children as _, ~setRoute, ()) =>
+  React.element(make(~setRoute, ()));

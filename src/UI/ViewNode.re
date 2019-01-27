@@ -213,7 +213,12 @@ let renderBorders =
   };
 
   /* Return new minX, minY, maxX, maxY */
-  (leftBorderWidth, topBorderWidth, leftBorderWidth +. width, bottomBorderWidth +. height);
+  (
+    leftBorderWidth,
+    topBorderWidth,
+    leftBorderWidth +. width,
+    bottomBorderWidth +. height,
+  );
 };
 
 let renderShadow = (~boxShadow, ~width, ~height, ~world, ~m) => {
@@ -272,11 +277,11 @@ let renderShadow = (~boxShadow, ~width, ~height, ~world, ~m) => {
 
 class viewNode (()) = {
   as _this;
-  val solidShader = Assets.solidShader();
   inherit (class node(renderPass))() as _super;
   pub! draw = (pass: renderPass, parentContext: NodeDrawContext.t) => {
     switch (pass) {
     | AlphaPass(m) =>
+      let solidShader = Assets.solidShader();
       let dimensions = _this#measurements();
       let width = float_of_int(dimensions.width);
       let height = float_of_int(dimensions.height);
@@ -297,8 +302,7 @@ class viewNode (()) = {
           ~world,
         );
 
-      let mainQuad =
-        Assets.quad(~minX, ~maxX, ~minY, ~maxY, ());
+      let mainQuad = Assets.quad(~minX, ~maxX, ~minY, ~maxY, ());
 
       let color = Color.multiplyAlpha(opacity, style.backgroundColor);
 

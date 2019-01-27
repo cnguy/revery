@@ -10,8 +10,8 @@
         Revery
         flex
         cohttp 
-        cohttp-async
         cohttp-lwt-unix
+        cohttp-async
         yojson
         async
             ))
